@@ -1,0 +1,16 @@
+[
+    {
+        "busid": "1",
+        "station": "Station 1",
+        "in": 4,
+        "out": 3,
+        "current": 4
+    },
+    {
+        "busid": "1",
+        "Station": "Station 2",
+        "in": 5,
+        "out": 3,
+        "current": 6
+    }
+]
