@@ -227,8 +227,8 @@ const sortQuery = () =>{
 // console.log(sortdb)
 app.get('/recorddb', cors(corsOption), async (req, res) => {
   let page = req.query.pages
-  if (page == undefined) {
-    page = 0
+  if (page == undefined || page < 1) {
+    page = 1
   }
   console.log(page)
   fluxQuery =
@@ -236,7 +236,7 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> range(start: 0)
     |> group()
     |> filter(fn: (r) => r._measurement == "Bus")
-    |> limit(n: 20,offset: ${page * 20})
+    |> limit(n: 20,offset: ${(page - 1) * 20})
     `
   await myQuery()
   sortQuery()
