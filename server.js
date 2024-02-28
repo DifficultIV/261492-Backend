@@ -15,9 +15,33 @@ const corsOption = {
   origin: '*'
 }
 let count = 0
-const location = [[0, 100, 0, 100], [101, 200, 101, 200], [201, 300, 201, 300]]
-const stationdb = ["Station 1", "Station 2", "Station 3"]
-let db = []
+const location = [[18.799084, 18.799365, 98.952515, 98.952855], //อาคารปฏิบัติการกลางคณะวิทยาศาสตร์
+[18.803066, 18.803286, 98.950466, 98.950718], //สำนักหอสมุด
+[18.803823, 18.804014, 98.949050, 98.949195], //อาคาร HB7 คณะมนุษยศาสตร์
+[18.806294, 18.806603, 98.951940, 98.952177], //โรงอาหารคณะมนุษยศาสตร์
+[18.804234, 18.804512, 98.953841, 98.954105], //ลานจอดรถ อ่างแก้ว
+[18.802537, 18.802728, 98.955369, 98.955631], //ไปรษณีย์
+[18.801196, 18.801443, 98.956621, 98.956847], //โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)
+[18.801511, 18.801781, 98.951125, 98.951366]] //""
+const stationdb = ["อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
+  "สำนักหอสมุด",
+  "อาคาร HB7 คณะมนุษยศาสตร์",
+  "โรงอาหารคณะมนุษยศาสตร์",
+  "ลานจอดรถ อ่างแก้ว",
+  "ไปรษณีย์",
+  "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
+  ""]
+let db = [
+  {
+    busid: "",
+    station: "Station 1",
+    date: "",
+    time: "",
+    in: 0,
+    out: 1,
+    current: 2
+  }
+]
 let allstationdb = [
   {
     busid: "",
@@ -161,6 +185,7 @@ const countQuery = async () => {
 }
 
 const myQuery = async () => {
+  querydb = []
   for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
     const o = tableMeta.toObject(values)
     // console.log(
@@ -174,53 +199,54 @@ const myQuery = async () => {
 // await myQuery()
 // await countQuery()
 // console.log(count)
-const sortQuery = () =>{
+const sortQuery = () => {
+  sortdb = []
   for (const data of querydb) {
-  const sortindex = sortdb.findIndex(obj => obj.date == data.datestamp && obj.time == data.timestamp)
-  if (sortindex != -1) {
-    if (data._field == "in") {
-      sortdb[sortindex].in = data._value
-    } else if (data._field == "out") {
-      sortdb[sortindex].out = data._value
-    } else if (data._field == "current") {
-      sortdb[sortindex].current = data._value
-    }
-  } else {
-    if (data._field == "in") {
-      sortdb.push({
-        busid: data._measurement,
-        station: data.Station,
-        date: data.datestamp,
-        time: data.timestamp,
-        in: data._value,
-        out: 0,
-        current: 0
-      })
-    } else if (data._field == "out") {
-      sortdb.push({
-        busid: data._measurement,
-        station: data.Station,
-        date: data.datestamp,
-        time: data.timestamp,
-        in: 0,
-        out: data._value,
-        current: 0
-      })
-    } else if (data._field == "current") {
-      sortdb.push({
-        busid: data._measurement,
-        station: data.Station,
-        date: data.datestamp,
-        time: data.timestamp,
-        in: 0,
-        out: 0,
-        current: data._value
-      })
+    const sortindex = sortdb.findIndex(obj => obj.date == data.datestamp && obj.time == data.timestamp)
+    if (sortindex != -1) {
+      if (data._field == "in") {
+        sortdb[sortindex].in = data._value
+      } else if (data._field == "out") {
+        sortdb[sortindex].out = data._value
+      } else if (data._field == "current") {
+        sortdb[sortindex].current = data._value
+      }
+    } else {
+      if (data._field == "in") {
+        sortdb.push({
+          busid: data._measurement,
+          station: data.Station,
+          date: data.datestamp,
+          time: data.timestamp,
+          in: data._value,
+          out: 0,
+          current: 0
+        })
+      } else if (data._field == "out") {
+        sortdb.push({
+          busid: data._measurement,
+          station: data.Station,
+          date: data.datestamp,
+          time: data.timestamp,
+          in: 0,
+          out: data._value,
+          current: 0
+        })
+      } else if (data._field == "current") {
+        sortdb.push({
+          busid: data._measurement,
+          station: data.Station,
+          date: data.datestamp,
+          time: data.timestamp,
+          in: 0,
+          out: 0,
+          current: data._value
+        })
+      }
+
     }
 
   }
-
-}
 }
 
 
@@ -236,10 +262,11 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> range(start: 0)
     |> group()
     |> filter(fn: (r) => r._measurement == "Bus")
-    |> limit(n: 20,offset: ${(page - 1) * 20})
+    |> limit(n: 60,offset: ${(page - 1) * 60})
     `
   await myQuery()
   sortQuery()
+  console.log(sortdb.length)
   res.json(sortdb)
 })
 
@@ -249,7 +276,7 @@ app.get('/db', cors(corsOption), async (req, res) => {
 
 app.get('/count', cors(corsOption), async (req, res) => {
   await countQuery()
-  let i = Math.ceil(count / 20)
+  let i = Math.ceil(count / 60)
   res.json({
     counts: count,
     page: i
