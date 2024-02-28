@@ -1,32 +1,16 @@
 [
-    {
-        "id": "1",
-        "time": "string (ISO 8601 string)",
-        "lastReset": "string (ISO 8601 string)",
-        "location": {
-          "latitude": 100,
-          "longitude": 200
-        },
-        "data": {
-          "enter": 4,
-          "exit": 3,
-          "current": 5
-        }
-       },
-       {
-        "id": "2",
-        "time": "string (ISO 8601 string)",
-        "lastReset": "string (ISO 8601 string)",
-        "location": {
-          "latitude": 200,
-          "longitude": 300
-        },
-        "data": {
-          "enter": 1,
-          "exit": 2,
-          "current": 6
-        }
-       }
-
+  {
+    "id": "test0",
+    "time": "2024-02-27T10:11:44.000Z",
+    "lastReset": "2024-02-27T09:21:25.000Z",
+    "location": {
+      "latitude": 0,
+      "longitude": 0
+    },
+    "data": {
+      "enter": 0,
+      "exit": 0,
+      "current": 0
+    }
+  }
 ]
-

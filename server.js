@@ -71,6 +71,23 @@ let allstationdb = [
     current: 2
   },
 ]
+let sendlocation = []
+
+for(let i = 0; i < location.length; i++){
+  sendlocation.push({
+    station: stationdb[i],
+    start_x: location[i][0],
+    end_x: location[i][1],
+    start_y: location[i][2],
+    end_y: location[i][3]
+  })
+}
+console.log(sendlocation)
+
+app.get('/location', cors(corsOption), (req, res) => {
+  res.json(sendlocation)
+  console.log(sendlocation)
+})
 
 const client = mqtt.connect("mqtts://11ba1af485354ff08eec334f40b97712.s1.eu.hivemq.cloud", {
   username: '261492',

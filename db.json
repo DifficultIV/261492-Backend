@@ -2,6 +2,8 @@
     {
         "busid": "1",
         "station": "Station 1",
+        "date":"",
+        "time":"",
         "in": 4,
         "out": 3,
         "current": 4
@@ -9,6 +11,8 @@
     {
         "busid": "1",
         "station": "Station 2",
+        "date":"",
+        "time":"",
         "in": 5,
         "out": 3,
         "current": 6
