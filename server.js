@@ -3,6 +3,7 @@ import fs from "fs"
 import mqtt from "mqtt"
 import express from "express"
 import cors from "cors"
+import { randomInt } from "crypto"
 const app = express()
 // const dbFiles = fs.readFileSync('./db.json', 'utf-8')
 // const dbFiles2 = fs.readFileSync('./dbnew.json', 'utf-8')
@@ -15,6 +16,15 @@ const corsOption = {
   origin: '*'
 }
 let count = 0
+let oldIn = randomInt(12)
+let oldOut = randomInt(12)
+let current = Math.max()
+let newIn = Math.max()
+let newOut = Math.max()
+while (oldIn - oldOut < 0) {
+  oldIn = randomInt(12)
+  oldOut = randomInt(12)
+}
 const location = [[18.799084, 18.799365, 98.952515, 98.952855], //อาคารปฏิบัติการกลางคณะวิทยาศาสตร์
 [18.803066, 18.803286, 98.950466, 98.950718], //สำนักหอสมุด
 [18.803823, 18.804014, 98.949050, 98.949195], //อาคาร HB7 คณะมนุษยศาสตร์
@@ -34,7 +44,7 @@ const stationdb = ["อาคารปฏิบัติการกลางค
 let db = [
   {
     busid: "",
-    station: "Station 1",
+    station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
     date: "",
     time: "",
     in: 0,
@@ -45,7 +55,7 @@ let db = [
 let allstationdb = [
   {
     busid: "",
-    station: "Station 1",
+    station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
     date: "",
     time: "",
     in: 0,
@@ -54,7 +64,7 @@ let allstationdb = [
   },
   {
     busid: "",
-    station: "Station 2",
+    station: "สำนักหอสมุด",
     date: "",
     time: "",
     in: 0,
@@ -63,23 +73,68 @@ let allstationdb = [
   },
   {
     busid: "",
-    station: "Station 3",
+    station: "อาคาร HB7 คณะมนุษยศาสตร์",
     date: "",
     time: "",
     in: 0,
     out: 1,
     current: 2
   },
+  {
+    busid: "",
+    station: "โรงอาหารคณะมนุษยศาสตร์",
+    date: "",
+    time: "",
+    in: 0,
+    out: 1,
+    current: 2
+  },
+  {
+    busid: "",
+    station: "ลานจอดรถ อ่างแก้ว",
+    date: "",
+    time: "",
+    in: 0,
+    out: 1,
+    current: 2
+  },
+  {
+    busid: "",
+    station: "ไปรษณีย์",
+    date: "",
+    time: "",
+    in: 0,
+    out: 1,
+    current: 2
+  },
+  {
+    busid: "",
+    station: "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
+    date: "",
+    time: "",
+    in: 0,
+    out: 1,
+    current: 2
+  },
+  {
+    busid: "",
+    station: "",
+    date: "",
+    time: "",
+    in: 0,
+    out: 1,
+    current: 2
+  }
 ]
 let sendlocation = []
 
-for(let i = 0; i < location.length; i++){
+for (let i = 0; i < location.length; i++) {
   sendlocation.push({
-    station: stationdb[i],
-    start_x: location[i][0],
-    end_x: location[i][1],
-    start_y: location[i][2],
-    end_y: location[i][3]
+    station_id: i,
+    start_lat: location[i][0],
+    end_lat: location[i][1],
+    start_lon: location[i][2],
+    end_lon: location[i][3]
   })
 }
 console.log(sendlocation)
@@ -101,21 +156,70 @@ client.on("connect", () => {
 client.on("message", (topic, message) => {
   const messageparse = JSON.parse(message.toString())
   console.log(messageparse)
+  const randomi = randomInt(7)
+
+  const randomLat = (Math.random() * (location[randomi][1] - location[randomi][0]) + location[randomi][0]) // delete when done testing
+  const randomLong = (Math.random() * (location[randomi][3] - location[randomi][2]) + location[randomi][2]) // delete when done testing
+  messageparse.location.latitude = randomLat // delete when done testing
+  messageparse.location.longitude = randomLong // delete when done testing
+  if (current == Math.max()) { // delete when done testing
+    current = oldIn - oldOut
+  } else {
+    newIn = randomInt(12) // delete when done testing
+    newOut = randomInt(12)// delete when done testing
+    console.log(newIn)
+    while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0) {
+      newIn = randomInt(12)
+      newOut = randomInt(12)
+      console.log(newIn)
+    }
+    current = current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut)))
+  }
   const writeApi = influxdb.getWriteApi(org, bucket)
   writeApi.useDefaultTags({ Line: '1' })
   for (let i = 0; i < location.length; i++) {
     if ((messageparse.location.latitude >= location[i][0] && messageparse.location.latitude <= location[i][1]) && (messageparse.location.longitude >= location[i][2] && messageparse.location.longitude <= location[i][3])) {
       const time = new Date(messageparse.time).toLocaleString('en-GB', { hourCycle: "h24" })
       const time_split = time.split(", ")
-      db = [{
-        busid: messageparse.id,
-        station: stationdb[i],
-        date: time_split[0],
-        time: time_split[1],
-        in: messageparse.data.enter,
-        out: messageparse.data.exit,
-        current: messageparse.data.current
-      }]
+      if (newIn == Math.max()) {
+        db = [{
+          busid: messageparse.id,
+          station: stationdb[i],
+          date: time_split[0],
+          time: time_split[1],
+          in: oldIn,
+          out: oldOut,
+          current: current
+        }]
+      } else {
+        console.log(newIn)
+        console.log(newOut)
+        console.log(Math.abs(newIn - oldIn))
+        db = [{
+          busid: messageparse.id,
+          station: stationdb[i],
+          date: time_split[0],
+          time: time_split[1],
+          in: Math.abs(newIn - oldIn),
+          out: Math.abs(newOut - oldOut),
+          current: current
+        }]
+      }
+      // db = [{
+      //   busid: messageparse.id,
+      //   station: stationdb[i],
+      //   date: time_split[0],
+      //   time: time_split[1],
+      //   in: messageparse.data.enter,
+      //   out: messageparse.data.exit,
+      //   current: messageparse.data.current
+      // }]
+      const data = JSON.stringify(db)
+      fs.writeFileSync("db.json", data, (error) => {
+        if (error) {
+          console.error(error)
+        }
+      })
       const sortIndex = allstationdb.findIndex(obj => (obj.station == stationdb[i]))
       if (sortIndex != -1) {
         allstationdb[sortIndex].busid = db[0].busid
@@ -128,6 +232,12 @@ client.on("message", (topic, message) => {
       } else {
         allstationdb.push(db)
       }
+      if (newIn != Math.max()) {
+        oldIn = Math.abs(newIn - oldIn)
+        oldOut = Math.abs(newOut - oldOut)
+      }
+
+      console.log(db[0].in)
       const point1 = new Point(`Bus`)
         .tag('busid', db[0].busid)
         .tag('datestamp', time_split[0])
