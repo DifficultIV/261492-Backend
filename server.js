@@ -21,6 +21,7 @@ let oldOut = randomInt(12)
 let current = Math.max()
 let newIn = Math.max()
 let newOut = Math.max()
+let lastTime = "0"
 while (oldIn - oldOut < 0) {
   oldIn = randomInt(12)
   oldOut = randomInt(12)
@@ -144,9 +145,9 @@ app.get('/location', cors(corsOption), (req, res) => {
   console.log(sendlocation)
 })
 
-const client = mqtt.connect("mqtts://11ba1af485354ff08eec334f40b97712.s1.eu.hivemq.cloud", {
-  username: '261492',
-  password: 'Proj_492'
+const client = mqtt.connect("mqtt://128.199.248.64", {
+  username: 'Client',
+  password: 'NotExactlyClient'
 })
 
 client.on("connect", () => {
@@ -380,13 +381,17 @@ const sortQuery = () => {
 // console.log(sortdb)
 app.get('/recorddb', cors(corsOption), async (req, res) => {
   let page = req.query.pages
+  lastTime = req.query.time
   if (page == undefined || page < 1) {
     page = 1
+  }
+  if (lastTime == undefined) {
+    lastTime = "0"
   }
   console.log(page)
   fluxQuery =
     `from(bucket: "${bucket}")
-    |> range(start: 0)
+    |> range(start: ${lastTime})
     |> group()
     |> filter(fn: (r) => r._measurement == "Bus")
     |> limit(n: 60,offset: ${(page - 1) * 60})
