@@ -138,7 +138,6 @@ for (let i = 0; i < location.length; i++) {
     end_lon: location[i][3]
   })
 }
-console.log(sendlocation)
 
 app.get('/location', cors(corsOption), (req, res) => {
   res.json(sendlocation)
@@ -169,7 +168,7 @@ client.on("message", (topic, message) => {
     newIn = randomInt(12) // delete when done testing
     newOut = randomInt(12)// delete when done testing
     console.log(newIn)
-    while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0) {
+    while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0 || current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) > 12) {
       newIn = randomInt(12)
       newOut = randomInt(12)
       console.log(newIn)
@@ -177,7 +176,7 @@ client.on("message", (topic, message) => {
     current = current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut)))
   }
   const writeApi = influxdb.getWriteApi(org, bucket)
-  writeApi.useDefaultTags({ Line: '1' })
+  writeApi.useDefaultTags({ Line: '3' })
   for (let i = 0; i < location.length; i++) {
     if ((messageparse.location.latitude >= location[i][0] && messageparse.location.latitude <= location[i][1]) && (messageparse.location.longitude >= location[i][2] && messageparse.location.longitude <= location[i][3])) {
       const time = new Date(messageparse.time).toLocaleString('en-GB', { hourCycle: "h24" })
@@ -319,6 +318,7 @@ const myQuery = async () => {
     // console.log(
     //   `${o.datestamp} ${o.timestamp} ${o._measurement} ${o.busid} (${o.Station}): ${o._field}=${o._value}`
     // )
+    // console.log(o.Line)
     querydb.push(o)
   }
 }
@@ -346,6 +346,7 @@ const sortQuery = () => {
           station: data.Station,
           date: data.datestamp,
           time: data.timestamp,
+          line: data.Line,
           in: data._value,
           out: 0,
           current: 0
@@ -356,6 +357,7 @@ const sortQuery = () => {
           station: data.Station,
           date: data.datestamp,
           time: data.timestamp,
+          line: data.Line,
           in: 0,
           out: data._value,
           current: 0
@@ -366,6 +368,7 @@ const sortQuery = () => {
           station: data.Station,
           date: data.datestamp,
           time: data.timestamp,
+          line: data.Line,
           in: 0,
           out: 0,
           current: data._value
