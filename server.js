@@ -395,7 +395,6 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
   fluxQuery =
     `from(bucket: "${bucket}")
     |> range(start: ${lastTime})
-    |> group()
     |> filter(fn: (r) => r._measurement == "Bus")
     |> limit(n: 60,offset: ${(page - 1) * 60})
     `
