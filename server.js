@@ -22,6 +22,7 @@ let current = Math.max()
 let newIn = Math.max()
 let newOut = Math.max()
 let lastTime = "0"
+let stationi = 0
 while (oldIn - oldOut < 0) {
   oldIn = randomInt(12)
   oldOut = randomInt(12)
@@ -156,7 +157,9 @@ client.on("connect", () => {
 client.on("message", (topic, message) => {
   const messageparse = JSON.parse(message.toString())
   console.log(messageparse)
-  const randomi = randomInt(7)
+  if(stationi > 7){
+    stationi = 0
+  }
 
   const randomLat = (Math.random() * (location[randomi][1] - location[randomi][0]) + location[randomi][0]) // delete when done testing
   const randomLong = (Math.random() * (location[randomi][3] - location[randomi][2]) + location[randomi][2]) // delete when done testing
@@ -220,6 +223,7 @@ client.on("message", (topic, message) => {
           console.error(error)
         }
       })
+      stationi += 1
       const sortIndex = allstationdb.findIndex(obj => (obj.station == stationdb[i]))
       if (sortIndex != -1) {
         allstationdb[sortIndex].busid = db[0].busid
@@ -286,8 +290,8 @@ const queryApi = new InfluxDB({ url, token }).getQueryApi(org)
 let fluxQuery =
   `from(bucket: "${bucket}")
     |> range(start: 0)
-    |> group()
     |> filter(fn: (r) => r._measurement == "Bus")
+    |> group()
     |> limit(n: 20,offset: 0)
     `
 
@@ -396,6 +400,7 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     `from(bucket: "${bucket}")
     |> range(start: ${lastTime})
     |> filter(fn: (r) => r._measurement == "Bus")
+    |> group()
     |> limit(n: 60,offset: ${(page - 1) * 60})
     `
   await myQuery()
