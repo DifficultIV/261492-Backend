@@ -165,6 +165,7 @@ client.on("message", (topic, message) => {
   const randomLong = (Math.random() * (location[randomi][3] - location[randomi][2]) + location[randomi][2]) // delete when done testing
   messageparse.location.latitude = randomLat // delete when done testing
   messageparse.location.longitude = randomLong // delete when done testing
+  messageparse.busid = "คันที่ 1"
   if (current == Math.max()) { // delete when done testing
     current = oldIn - oldOut
   } else {
