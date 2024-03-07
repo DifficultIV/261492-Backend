@@ -27,14 +27,14 @@ while (oldIn - oldOut < 0) {
   oldIn = randomInt(12)
   oldOut = randomInt(12)
 }
-const location = [[18.799084, 18.799365, 98.952515, 98.952855], //อาคารปฏิบัติการกลางคณะวิทยาศาสตร์
-[18.803066, 18.803286, 98.950466, 98.950718], //สำนักหอสมุด
-[18.803823, 18.804014, 98.949050, 98.949195], //อาคาร HB7 คณะมนุษยศาสตร์
-[18.806294, 18.806603, 98.951940, 98.952177], //โรงอาหารคณะมนุษยศาสตร์
-[18.804234, 18.804512, 98.953841, 98.954105], //ลานจอดรถ อ่างแก้ว
-[18.802537, 18.802728, 98.955369, 98.955631], //ไปรษณีย์
-[18.801196, 18.801443, 98.956621, 98.956847], //โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)
-[18.801511, 18.801781, 98.951125, 98.951366]] //""
+const location = [[18.799102, 18.799718, 98.952356, 98.953035], //อาคารปฏิบัติการกลางคณะวิทยาศาสตร์
+[18.802831, 18.803373, 98.950374, 98.950902], //สำนักหอสมุด
+[18.803762, 18.804201, 98.948889, 98.949302], //อาคาร HB7 คณะมนุษยศาสตร์
+[18.806269, 18.806886, 98.951641, 98.952284], //โรงอาหารคณะมนุษยศาสตร์
+[18.804150, 18.804694, 98.953735, 98.954204], //ลานจอดรถ อ่างแก้ว
+[18.802544, 18.802828, 98.955161, 98.955708], //ไปรษณีย์
+[18.801084, 18.801630, 98.956380, 98.956938], //โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)
+[18.801410, 18.802017, 98.951053, 98.951527]] //""
 const stationdb = ["อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
   "สำนักหอสมุด",
   "อาคาร HB7 คณะมนุษยศาสตร์",
@@ -161,8 +161,8 @@ client.on("message", (topic, message) => {
     stationi = 0
   }
 
-  const randomLat = (Math.random() * (location[randomi][1] - location[randomi][0]) + location[randomi][0]) // delete when done testing
-  const randomLong = (Math.random() * (location[randomi][3] - location[randomi][2]) + location[randomi][2]) // delete when done testing
+  const randomLat = (Math.random() * (location[stationi][1] - location[stationi][0]) + location[stationi][0]) // delete when done testing
+  const randomLong = (Math.random() * (location[stationi][3] - location[stationi][2]) + location[stationi][2]) // delete when done testing
   messageparse.location.latitude = randomLat // delete when done testing
   messageparse.location.longitude = randomLong // delete when done testing
   messageparse.busid = "คันที่ 1"
@@ -241,7 +241,12 @@ client.on("message", (topic, message) => {
         oldIn = Math.abs(newIn - oldIn)
         oldOut = Math.abs(newOut - oldOut)
       }
-
+      const allstationdata =JSON.stringify(allstationdb)
+      fs.writeFileSync("allstationdb.json", allstationdata, (error) => {
+        if (error) {
+          console.error(error)
+        }
+      })
       console.log(db[0].in)
       const point1 = new Point(`Bus`)
         .tag('busid', db[0].busid)
