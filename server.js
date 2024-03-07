@@ -23,10 +23,10 @@ let newIn = Math.max()
 let newOut = Math.max()
 let lastTime = "0"
 let stationi = 0
-while (oldIn - oldOut < 0) {
-  oldIn = randomInt(12)
-  oldOut = randomInt(12)
-}
+// while (oldIn - oldOut < 0) {
+//   oldIn = randomInt(12)
+//   oldOut = randomInt(12)
+// }
 const location = [[18.799102, 18.799718, 98.952356, 98.953035], //อาคารปฏิบัติการกลางคณะวิทยาศาสตร์
 [18.802831, 18.803373, 98.950374, 98.950902], //สำนักหอสมุด
 [18.803762, 18.804201, 98.948889, 98.949302], //อาคาร HB7 คณะมนุษยศาสตร์
@@ -43,91 +43,97 @@ const stationdb = ["อาคารปฏิบัติการกลางค
   "ไปรษณีย์",
   "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
   ""]
-let db = [
-  {
-    busid: "คันที่ 1",
-    station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  }
-]
-let allstationdb = [
-  {
-    busid: "",
-    station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "สำนักหอสมุด",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "อาคาร HB7 คณะมนุษยศาสตร์",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "โรงอาหารคณะมนุษยศาสตร์",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "ลานจอดรถ อ่างแก้ว",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "ไปรษณีย์",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  },
-  {
-    busid: "",
-    station: "",
-    date: "",
-    time: "",
-    in: 0,
-    out: 1,
-    current: 2
-  }
-]
+// let db = [
+//   {
+//     busid: "คันที่ 1",
+//     station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   }
+// ]
+
+let db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'))
+oldIn = db[0].in
+oldOut = db[0].out
+current = db[0].current
+let allstationdb = JSON.parse(fs.readFileSync('./allstationdb.json', 'utf-8'))
+// let allstationdb = [
+//   {
+//     busid: "",
+//     station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "สำนักหอสมุด",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "อาคาร HB7 คณะมนุษยศาสตร์",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "โรงอาหารคณะมนุษยศาสตร์",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "ลานจอดรถ อ่างแก้ว",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "ไปรษณีย์",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   },
+//   {
+//     busid: "",
+//     station: "",
+//     date: "",
+//     time: "",
+//     in: 0,
+//     out: 1,
+//     current: 2
+//   }
+// ]
 let sendlocation = []
 
 for (let i = 0; i < location.length; i++) {
