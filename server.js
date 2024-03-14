@@ -178,7 +178,7 @@ client.on("message", (topic, message) => {
     newIn = randomInt(16) // delete when done testing
     newOut = randomInt(16)// delete when done testing
     console.log(newIn)
-    while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0 || current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) > 12) {
+    while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0 || current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) > 16) {
       newIn = randomInt(16)
       newOut = randomInt(16)
       console.log(newIn)
