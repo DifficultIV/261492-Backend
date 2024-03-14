@@ -175,12 +175,12 @@ client.on("message", (topic, message) => {
   if (current == Math.max()) { // delete when done testing
     current = oldIn - oldOut
   } else {
-    newIn = randomInt(12) // delete when done testing
-    newOut = randomInt(12)// delete when done testing
+    newIn = randomInt(16) // delete when done testing
+    newOut = randomInt(16)// delete when done testing
     console.log(newIn)
     while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0 || current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) > 12) {
-      newIn = randomInt(12)
-      newOut = randomInt(12)
+      newIn = randomInt(16)
+      newOut = randomInt(16)
       console.log(newIn)
     }
     current = current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut)))
