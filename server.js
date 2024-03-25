@@ -43,97 +43,12 @@ const stationdb = ["อาคารปฏิบัติการกลางค
   "ไปรษณีย์",
   "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
   ""]
-// let db = [
-//   {
-//     busid: "คันที่ 1",
-//     station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   }
-// ]
 
 let db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'))
 oldIn = db[0].in
 oldOut = db[0].out
 current = db[0].current
 let allstationdb = JSON.parse(fs.readFileSync('./allstationdb.json', 'utf-8'))
-// let allstationdb = [
-//   {
-//     busid: "",
-//     station: "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "สำนักหอสมุด",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "อาคาร HB7 คณะมนุษยศาสตร์",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "โรงอาหารคณะมนุษยศาสตร์",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "ลานจอดรถ อ่างแก้ว",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "ไปรษณีย์",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   },
-//   {
-//     busid: "",
-//     station: "",
-//     date: "",
-//     time: "",
-//     in: 0,
-//     out: 1,
-//     current: 2
-//   }
-// ]
 let sendlocation = []
 
 for (let i = 0; i < location.length; i++) {
@@ -157,80 +72,33 @@ const client = mqtt.connect("mqtt://128.199.248.64", {
 })
 
 client.on("connect", () => {
-  client.subscribe("test")
+  client.subscribe("bus")
 });
 
 client.on("message", (topic, message) => {
   const messageparse = JSON.parse(message.toString())
-  console.log(messageparse)
-  if(stationi > 7){
-    stationi = 0
-  }
-
-  const randomLat = (Math.random() * (location[stationi][1] - location[stationi][0]) + location[stationi][0]) // delete when done testing
-  const randomLong = (Math.random() * (location[stationi][3] - location[stationi][2]) + location[stationi][2]) // delete when done testing
-  messageparse.location.latitude = randomLat // delete when done testing
-  messageparse.location.longitude = randomLong // delete when done testing
-  messageparse.id = "คันที่ 1"
-  if (current == Math.max()) { // delete when done testing
-    current = oldIn - oldOut
-  } else {
-    newIn = randomInt(16) // delete when done testing
-    newOut = randomInt(16)// delete when done testing
-    console.log(newIn)
-    while (current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) < 0 || current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut))) > 16) {
-      newIn = randomInt(16)
-      newOut = randomInt(16)
-      console.log(newIn)
-    }
-    current = current + ((Math.abs(newIn - oldIn)) - (Math.abs(newOut - oldOut)))
-  }
+  // console.log(messageparse)
   const writeApi = influxdb.getWriteApi(org, bucket)
   writeApi.useDefaultTags({ Line: '3' })
   for (let i = 0; i < location.length; i++) {
     if ((messageparse.location.latitude >= location[i][0] && messageparse.location.latitude <= location[i][1]) && (messageparse.location.longitude >= location[i][2] && messageparse.location.longitude <= location[i][3])) {
       const time = new Date(messageparse.time).toLocaleString('en-GB', { hourCycle: "h24" })
       const time_split = time.split(", ")
-      if (newIn == Math.max()) {
-        db = [{
-          busid: messageparse.id,
-          station: stationdb[i],
-          date: time_split[0],
-          time: time_split[1],
-          in: oldIn,
-          out: oldOut,
-          current: current
-        }]
-      } else {
-        console.log(newIn)
-        console.log(newOut)
-        console.log(Math.abs(newIn - oldIn))
-        db = [{
-          busid: messageparse.id,
-          station: stationdb[i],
-          date: time_split[0],
-          time: time_split[1],
-          in: Math.abs(newIn - oldIn),
-          out: Math.abs(newOut - oldOut),
-          current: current
-        }]
-      }
-      // db = [{
-      //   busid: messageparse.id,
-      //   station: stationdb[i],
-      //   date: time_split[0],
-      //   time: time_split[1],
-      //   in: messageparse.data.enter,
-      //   out: messageparse.data.exit,
-      //   current: messageparse.data.current
-      // }]
+      db = [{
+        busid: messageparse.id,
+        station: stationdb[i],
+        date: time_split[0],
+        time: time_split[1],
+        in: Math.abs(messageparse.data.enter - oldIn),
+        out: Math.abs(messageparse.data.exit - oldOut),
+        current: messageparse.data.current
+      }]
       const data = JSON.stringify(db)
       fs.writeFileSync("db.json", data, (error) => {
         if (error) {
           console.error(error)
         }
       })
-      stationi += 1
       const sortIndex = allstationdb.findIndex(obj => (obj.station == stationdb[i]))
       if (sortIndex != -1) {
         allstationdb[sortIndex].busid = db[0].busid
@@ -243,17 +111,12 @@ client.on("message", (topic, message) => {
       } else {
         allstationdb.push(db)
       }
-      if (newIn != Math.max()) {
-        oldIn = Math.abs(newIn - oldIn)
-        oldOut = Math.abs(newOut - oldOut)
-      }
-      const allstationdata =JSON.stringify(allstationdb)
+      const allstationdata = JSON.stringify(allstationdb)
       fs.writeFileSync("allstationdb.json", allstationdata, (error) => {
         if (error) {
           console.error(error)
         }
       })
-      console.log(db[0].in)
       const point1 = new Point(`Bus`)
         .tag('busid', db[0].busid)
         .tag('datestamp', time_split[0])
