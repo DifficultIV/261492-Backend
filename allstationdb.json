@@ -1,1 +1,74 @@
-[{"busid":"test0","station":"อาคารปฏิบัติการกลางคณะวิทยาศาสตร์","date":"07/02/2024","time":"19:35:55","in":0,"out":0,"current":6},{"busid":"test0","station":"สำนักหอสมุด","date":"07/02/2024","time":"19:40:55","in":4,"out":5,"current":5},{"busid":"test0","station":"อาคาร HB7 คณะมนุษยศาสตร์","date":"07/02/2024","time":"19:41:22","in":1,"out":5,"current":1},{"busid":"","station":"โรงอาหารคณะมนุษยศาสตร์","date":"","time":"","in":0,"out":1,"current":2},{"busid":"","station":"ลานจอดรถ อ่างแก้ว","date":"","time":"","in":0,"out":1,"current":2},{"busid":"","station":"ไปรษณีย์","date":"","time":"","in":0,"out":1,"current":2},{"busid":"","station":"โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)","date":"","time":"","in":0,"out":1,"current":2},{"busid":"","station":"","date":"","time":"","in":0,"out":1,"current":2}]
+[
+    {
+        "busid": "",
+        "station": "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "สำนักหอสมุด",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "อาคาร HB7 คณะมนุษยศาสตร์",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "โรงอาหารคณะมนุษยศาสตร์",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "ลานจอดรถ อ่างแก้ว",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "ไปรษณีย์",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    }
+]
