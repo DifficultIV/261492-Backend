@@ -268,10 +268,16 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     page = 1
   }
   if (lastTime == undefined) {
-    lastTime = "0"
+    fluxQuery =
+    `from(bucket: "${bucket}")
+    |> range(start: 0)
+    |> filter(fn: (r) => r._measurement == "Bus")
+    |> group()
+    |> limit(n: 60,offset: ${(page - 1) * 60})
+    `
   }
-  console.log(page)
-  fluxQuery =
+  else{
+      fluxQuery =
     `from(bucket: "${bucket}")
     |> range(start: 0)
     |> filter(fn: (r) => r._measurement == "Bus")
@@ -279,6 +285,8 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> group()
     |> limit(n: 60,offset: ${(page - 1) * 60})
     `
+  }
+  console.log(page)
   await myQuery()
   sortQuery()
   console.log(sortdb.length)
