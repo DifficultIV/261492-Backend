@@ -281,7 +281,7 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     `from(bucket: "${bucket}")
     |> range(start: 0)
     |> filter(fn: (r) => r._measurement == "Bus")
-    |> filter(fn: (r) => r._datestamp == "${lastTime}")
+    |> filter(fn: (r) => r.datestamp == "${lastTime}")
     |> group()
     |> limit(n: 60,offset: ${(page - 1) * 60})
     `
