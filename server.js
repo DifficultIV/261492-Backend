@@ -267,7 +267,7 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
   if (page == undefined || page < 1) {
     page = 1
   }
-  if (lastTime == undefined) {
+  if (lastTime == undefined || lastTime == 0) {
     fluxQuery =
     `from(bucket: "${bucket}")
     |> range(start: 0)
