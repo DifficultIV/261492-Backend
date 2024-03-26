@@ -77,7 +77,7 @@ client.on("connect", () => {
 
 client.on("message", (topic, message) => {
   const messageparse = JSON.parse(message.toString())
-  // console.log(messageparse)
+  console.log(messageparse)
   const writeApi = influxdb.getWriteApi(org, bucket)
   writeApi.useDefaultTags({ Line: '3' })
   for (let i = 0; i < location.length; i++) {
@@ -273,8 +273,9 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
   console.log(page)
   fluxQuery =
     `from(bucket: "${bucket}")
-    |> range(start: ${lastTime})
+    |> range(start: 0)
     |> filter(fn: (r) => r._measurement == "Bus")
+    |> filter(fn: (r) => r._datestamp == "${lastTime}")
     |> group()
     |> limit(n: 60,offset: ${(page - 1) * 60})
     `
