@@ -16,13 +16,7 @@ const corsOption = {
   origin: '*'
 }
 let count = 0
-let oldIn = randomInt(12)
-let oldOut = randomInt(12)
-let current = Math.max()
-let newIn = Math.max()
-let newOut = Math.max()
 let lastTime = "0"
-let stationi = 0
 // while (oldIn - oldOut < 0) {
 //   oldIn = randomInt(12)
 //   oldOut = randomInt(12)
@@ -45,12 +39,13 @@ const stationdb = ["อาคารปฏิบัติการกลางค
   ""]
 
 let db = JSON.parse(fs.readFileSync('./db.json', 'utf-8'))
-oldIn = db[0].in
-oldOut = db[0].out
-current = db[0].current
+let oldIn = db[0].in
+let oldOut = db[0].out
+let current = db[0].current
 let allstationdb = JSON.parse(fs.readFileSync('./allstationdb.json', 'utf-8'))
 let sendlocation = []
-
+console.log(oldIn)
+console.log(oldOut)
 for (let i = 0; i < location.length; i++) {
   sendlocation.push({
     station_id: i,
@@ -93,6 +88,8 @@ client.on("message", (topic, message) => {
         out: Math.abs(messageparse.data.exit - oldOut),
         current: messageparse.data.current
       }]
+      oldIn = messageparse.data.enter
+      oldOut = messageparse.data.exit
       const data = JSON.stringify(db)
       fs.writeFileSync("db.json", data, (error) => {
         if (error) {
