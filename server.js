@@ -192,9 +192,9 @@ const myQuery = async () => {
   querydb = []
   for await (const { values, tableMeta } of queryApi.iterateRows(fluxQuery)) {
     const o = tableMeta.toObject(values)
-    // console.log(
-    //   `${o.datestamp} ${o.timestamp} ${o._measurement} ${o.busid} (${o.Station}): ${o._field}=${o._value}`
-    // )
+    console.log(
+      `${o.datestamp} ${o.timestamp} ${o._measurement} ${o.busid} (${o.Station}): ${o._field}=${o._value}`
+    )
     // console.log(o.Line)
     querydb.push(o)
   }
@@ -271,8 +271,8 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> range(start: 0)
     |> filter(fn: (r) => r._measurement == "Bus")
     |> group()
-    |> limit(n: 60,offset: ${(page - 1) * 60})
     |> sort(columns: ["busid", "datestamp","timestamp"])
+    |> limit(n: 60,offset: ${(page - 1) * 60})
     `
   }
   else{
@@ -282,14 +282,15 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> filter(fn: (r) => r._measurement == "Bus")
     |> filter(fn: (r) => r.datestamp == "${lastTime}")
     |> group()
-    |> limit(n: 60,offset: ${(page - 1) * 60})
     |> sort(columns: ["busid", "datestamp","timestamp"])
+    |> limit(n: 60,offset: ${(page - 1) * 60})
     `
   }
   console.log(page)
   await myQuery()
   sortQuery()
   console.log(sortdb.length)
+  console.log(sortdb)
   res.json(sortdb)
 })
 
