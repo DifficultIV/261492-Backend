@@ -1,1 +1,74 @@
-[{"busid":"33","station":"อาคารปฏิบัติการกลางคณะวิทยาศาสตร์","date":"27/02/2024","time":"15:00:22","in":null,"out":null,"current":0},{"busid":"33","station":"สำนักหอสมุด","date":"27/02/2024","time":"15:08:07","in":0,"out":0,"current":0},{"busid":"33","station":"อาคาร HB7 คณะมนุษยศาสตร์","date":"27/02/2024","time":"15:07:31","in":0,"out":0,"current":0},{"busid":"33","station":"โรงอาหารคณะมนุษยศาสตร์","date":"27/02/2024","time":"15:06:04","in":0,"out":0,"current":0},{"busid":"","station":"ลานจอดรถ อ่างแก้ว","date":"","time":"","in":0,"out":0,"current":0},{"busid":"","station":"ไปรษณีย์","date":"","time":"","in":0,"out":0,"current":0},{"busid":"","station":"โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)","date":"","time":"","in":0,"out":0,"current":0},{"busid":"","station":"","date":"","time":"","in":0,"out":0,"current":0}]
+[
+    {
+        "busid": "33",
+        "station": "อาคารปฏิบัติการกลางคณะวิทยาศาสตร์",
+        "date": "27/02/2024",
+        "time": "15:00:22",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "33",
+        "station": "สำนักหอสมุด",
+        "date": "27/02/2024",
+        "time": "15:08:07",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "33",
+        "station": "อาคาร HB7 คณะมนุษยศาสตร์",
+        "date": "27/02/2024",
+        "time": "15:07:31",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "33",
+        "station": "โรงอาหารคณะมนุษยศาสตร์",
+        "date": "27/02/2024",
+        "time": "15:06:04",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "ลานจอดรถ อ่างแก้ว",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "ไปรษณีย์",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "โรงอาหารคณะรัฐศาสตร์ (ตรงข้าม)",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    },
+    {
+        "busid": "",
+        "station": "",
+        "date": "",
+        "time": "",
+        "in": 0,
+        "out": 0,
+        "current": 0
+    }
+]
