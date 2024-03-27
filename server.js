@@ -165,6 +165,7 @@ let fluxQuery =
     |> filter(fn: (r) => r._measurement == "Bus")
     |> group()
     |> limit(n: 20,offset: 0)
+    |> sort(columns: ["busid", "datestamp","timestamp"])
     `
 
 let fluxCountQuery =
@@ -271,6 +272,7 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> filter(fn: (r) => r._measurement == "Bus")
     |> group()
     |> limit(n: 60,offset: ${(page - 1) * 60})
+    |> sort(columns: ["busid", "datestamp","timestamp"])
     `
   }
   else{
@@ -281,6 +283,7 @@ app.get('/recorddb', cors(corsOption), async (req, res) => {
     |> filter(fn: (r) => r.datestamp == "${lastTime}")
     |> group()
     |> limit(n: 60,offset: ${(page - 1) * 60})
+    |> sort(columns: ["busid", "datestamp","timestamp"])
     `
   }
   console.log(page)
