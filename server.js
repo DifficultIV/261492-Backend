@@ -218,7 +218,7 @@ const sortQuery = () => {
     } else {
       if (data._field == "in") {
         sortdb.push({
-          busid: data._measurement,
+          busid: data.busid,
           station: data.Station,
           date: data.datestamp,
           time: data.timestamp,
@@ -229,7 +229,7 @@ const sortQuery = () => {
         })
       } else if (data._field == "out") {
         sortdb.push({
-          busid: data._measurement,
+          busid: data.busid,
           station: data.Station,
           date: data.datestamp,
           time: data.timestamp,
@@ -240,7 +240,7 @@ const sortQuery = () => {
         })
       } else if (data._field == "current") {
         sortdb.push({
-          busid: data._measurement,
+          busid: data.busid,
           station: data.Station,
           date: data.datestamp,
           time: data.timestamp,
