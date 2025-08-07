@@ -18,3 +18,5 @@ then run
 node --env-file=.env server.js
 ```
 to activate server
+
+[Frontend Page](https://github.com/DifficultIV/261492-Occupancy-monitoring)
